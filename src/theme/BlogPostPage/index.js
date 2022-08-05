@@ -9,9 +9,9 @@ import BlogPostPageMetadata from '@theme/BlogPostPage/Metadata';
 import TOC from '@theme/TOC';
 
 // add start
-import 'gitalk/dist/gitalk.css'
-import GitalkComponent from "gitalk/dist/gitalk-component";
-import BrowserOnly from '@docusaurus/BrowserOnly';
+// import 'gitalk/dist/gitalk.css'
+// import GitalkComponent from "gitalk/dist/gitalk-component";
+// import BrowserOnly from '@docusaurus/BrowserOnly';
 // add end
 
 function BlogPostPageContent({sidebar, children}) {
@@ -40,16 +40,15 @@ function BlogPostPageContent({sidebar, children}) {
         <BlogPostPaginator nextItem={nextItem} prevItem={prevItem} />
       )}
       {/* add start */}
-      <BrowserOnly>
+      {/* <BrowserOnly>
         {
-          () => <div>
+          () =>
             <GitalkComponent options={{
             clientID: "cacbc533c48221e2be7d", clientSecret: "3e6535666d918b5c1d64bbea9cda906885caaa19"
             , repo: "wiki", owner: "sch246", admin:["sch246"], id: `blog/${title}`, title:`blog/${title}`
           }} />
-          </div>
         }
-      </BrowserOnly>
+      </BrowserOnly> */}
       {/* add end */}
     </BlogLayout>
   );

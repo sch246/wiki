@@ -12,10 +12,10 @@ import NotFound from '@theme/NotFound';
 import SearchMetadata from '@theme/SearchMetadata';
 
 // add start
-import 'gitalk/dist/gitalk.css'
-import GitalkComponent from "gitalk/dist/gitalk-component";
-import BrowserOnly from '@docusaurus/BrowserOnly';
-import Gitalk from 'gitalk'
+// import 'gitalk/dist/gitalk.css'
+// import GitalkComponent from "gitalk/dist/gitalk-component";
+// import BrowserOnly from '@docusaurus/BrowserOnly';
+// import Gitalk from 'gitalk'
 // add end
 export default function DocPage(props) {
   const {versionMetadata} = props;
@@ -23,7 +23,7 @@ export default function DocPage(props) {
   if (!currentDocRouteMetadata) {
     return <NotFound />;
   }
-  const {title, docElement, sidebarName, sidebarItems} = currentDocRouteMetadata;
+  const {docElement, sidebarName, sidebarItems} = currentDocRouteMetadata;
   return (
     <>
       <SearchMetadata
@@ -44,26 +44,15 @@ export default function DocPage(props) {
           <DocsSidebarProvider name={sidebarName} items={sidebarItems}>
             <DocPageLayout>{docElement}
       {/* add start */}
-      <BrowserOnly>
+      {/* <BrowserOnly>
         {
-          () =><div id="gitalk-container"></div>
-          //   <GitalkComponent options={{
-          //   clientID: "cacbc533c48221e2be7d", clientSecret: "3e6535666d918b5c1d64bbea9cda906885caaa19"
-          //   , repo: "wiki", owner: "sch246", admin:["sch246"], id: `docs/${title}`, title:`docs/${title}`
-          // }} />
+          () =>
+            <GitalkComponent options={{
+            clientID: "cacbc533c48221e2be7d", clientSecret: "3e6535666d918b5c1d64bbea9cda906885caaa19"
+            , repo: "wiki", owner: "sch246", admin:["sch246"], id: `docs/${title}`, title:`docs/${title}`
+          }} />
         }
-        var gitalk = new Gitalk({{
-          clientID: 'cacbc533c48221e2be7d',
-          clientSecret: '3e6535666d918b5c1d64bbea9cda906885caaa19',
-          repo: 'wiki',
-          owner: 'sch246',
-          admin: ['sch246'],
-          id: `docs/${title}`,      // Ensure uniqueness and length less than 50
-          title:`docs/${title}`
-          // distractionFreeMode: false  // Facebook-like distraction free mode
-        }})
-        gitalk.render('gitalk-container')
-      </BrowserOnly>
+      </BrowserOnly> */}
       {/* add end */}</DocPageLayout>
           </DocsSidebarProvider>
         </DocsVersionProvider>
