@@ -43,10 +43,15 @@ export default function DocPage(props) {
           <DocsSidebarProvider name={sidebarName} items={sidebarItems}>
             <DocPageLayout>{docElement}
       {/* add start */}
-            {<GitalkComponent options={{
+      <BrowserOnly>
+        {
+          () =>
+            <GitalkComponent options={{
             clientID: "cacbc533c48221e2be7d", clientSecret: "3e6535666d918b5c1d64bbea9cda906885caaa19"
             , repo: "wiki", owner: "sch246", admin:["sch246"], id: `docs/${title}`, title:`docs/${title}`
-          }} />}
+          }} />
+        }
+      </BrowserOnly>
       {/* add end */}</DocPageLayout>
           </DocsSidebarProvider>
         </DocsVersionProvider>
