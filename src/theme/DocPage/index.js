@@ -15,6 +15,7 @@ import SearchMetadata from '@theme/SearchMetadata';
 import 'gitalk/dist/gitalk.css'
 import GitalkComponent from "gitalk/dist/gitalk-component";
 import BrowserOnly from '@docusaurus/BrowserOnly';
+import Gitalk from 'gitalk'
 // add end
 export default function DocPage(props) {
   const {versionMetadata} = props;
