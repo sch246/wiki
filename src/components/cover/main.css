@@ -1,0 +1,8 @@
+cover {
+    color: var(--ifm-color-txt);
+    background: var(--ifm-color-txt);
+}
+
+cover:hover {
+    color: var(--ifm-color-bg);
+}

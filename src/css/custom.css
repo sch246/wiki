@@ -1,0 +1,195 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-bg: #fff;
+  --ifm-color-txt: #242526;
+  --ifm-color-primary: #02acbe;
+  --ifm-color-primary-dark: #29784c;
+  --ifm-color-primary-darker: #277148;
+  --ifm-color-primary-darkest: #205d3b;
+  --ifm-color-primary-light: #33925d;
+  --ifm-color-primary-lighter: #359962;
+  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-code-font-size: 95%;
+  --ifm-blockquote-border-left-width: 4px;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-bg: #242526;
+  --ifm-color-txt: #fff;
+  --ifm-color-primary: #02acbe;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --ifm-blockquote-border-left-width: 4px;
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+[data-theme='dark'] .docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+
+
+/* 目录样式优化 */
+.table-of-contents .table-of-contents__link--active {
+  font-weight: var(--ifm-font-weight-semibold);
+  margin-left: -16px;
+  padding-left: 12px;
+  border-left: 4px solid var(--ifm-link-color);
+}
+
+/* Algolia搜索样式优化（去掉 Ctrl + K）*/
+/* .DocSearch-Button-Key {
+  display: none !important;
+} */
+
+/* 去掉侧边栏右侧的分割线 */
+/* .main-wrapper>div>div {
+  border-right: none !important;
+} */
+
+
+aside.theme-doc-sidebar-container.docSidebarContainer_rKC_ {
+  border-right: none;
+}
+
+/* 隐藏 scrollbar */
+/* ::-webkit-scrollbar {
+  display: none;
+} */
+
+/* 文字选取颜色 */
+::selection {
+  background: #00d9d9;
+  color: #ffffff;
+}
+
+/* Smooth Scroll 顺滑跳转到某位置 */
+html {
+  scroll-behavior: smooth;
+}
+
+img {
+  border: 3px solid black;
+  background: rgba(255, 255, 255, 0);
+}
+
+img[alt=badge] {
+  border: none;
+}
+
+/* 图标 */
+/* .navbar__logo{
+  margin: 0 0;
+} */
+img {
+      border: 0px solid black;
+}
+/* 评论头像变圆 */
+/* .gt-header-avatar{
+  border-radius: 50%;
+} */
+
+html[data-theme='dark'] .navbar__logo img {
+  background: #242526;
+}
+
+
+/* github图标 */
+.header-github-link:before {
+  content: '';
+  display: flex;
+  width: 30px;
+  height: 30px;
+}
+
+.header-github-link:before {
+  content: '';
+  width: 24px;
+  height: 24px;
+  display: flex;
+  background: url("/static/img/github/black.svg") no-repeat;
+}
+
+html[data-theme='dark'] .header-github-link:before {
+  background: no-repeat center/24px url("/static/img/github/white.svg");
+}
+
+.collapse-button{
+  display: inline;
+  width: 100%;
+  color: #393a34;
+  background-color:#e6f6e6;
+  /* 边框样式、颜色、宽度 */
+  border: 1px solid #e6f6e6;
+  border-radius: 3px;
+  font-size: medium;
+  text-align: left;
+}
+.collapse-button:hover {
+  background-color:#c3ebc3;
+}
+
+scover{
+  color: var(--ifm-color-txt);
+  background: var(--ifm-color-txt);
+}
+
+cover{
+color: var(--ifm-color-txt);
+background: var(--ifm-color-txt);
+transition: color 0.1s linear;
+}
+
+cover a{
+color: var(--ifm-color-txt);
+background: var(--ifm-color-txt);
+transition: color 0.1s linear;
+}
+
+cover:hover{
+  color: var(--ifm-color-bg);
+}
+cover a:hover {
+  color: var(--ifm-color-primary);
+}
+
+code {
+  background-color: #f9f2f4;
+  font-size:90%;
+  border:0;
+  padding:2px 4px;
+  color: #c7254e;
+}
+
+hover in {
+  display: none;
+}
+hover:hover in{
+    display: inline;
+}
+hover:hover out{
+    display: none;
+}
+expand show {
+  display: none;
+}
+expand:hover show {
+  display:block;
+}
