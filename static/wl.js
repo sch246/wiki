@@ -1,1 +1,0 @@
-Waline.init({el: '#waline',serverURL: 'https://www.sch246.com',});
