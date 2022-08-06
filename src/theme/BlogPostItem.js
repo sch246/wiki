@@ -7,15 +7,18 @@ function faaaaaaa(){
             
     const script = document.createElement("script")
     script.src = "https://unpkg.com/@waline/client@v2/dist/waline.js"
+    script.async = true
     document.head.appendChild(script)
             
     const style = document.createElement("link")
     style.rel = "stylesheet"
     style.href = "https://unpkg.com/@waline/client@v2/dist/waline.css"
+    style.async = true
     document.head.appendChild(style)
             
     const script2 = document.createElement("script")
     script2.src = "http://www.sch246.com/wl.js"
+    script2.async = true
     document.body.appendChild(script2)
 
     
