@@ -17,8 +17,9 @@ function faaaaaaa(){
     document.head.appendChild(style)
             
     const script2 = document.createElement("script")
-    script2.src = "http://www.sch246.com/wl.js"
-    script2.async = true
+    // script2.src = "http://www.sch246.com/wl.js"
+    script2.innerHTML = "Waline.init({el: '#waline',serverURL: 'https://www.sch246.com',});"
+    // script2.async = true
     document.body.appendChild(script2)
 
     
