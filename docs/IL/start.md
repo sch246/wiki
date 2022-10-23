@@ -5,6 +5,8 @@ title: 开始
 
 import Cover from '@site/src/components/cover/main';
 
+![](https://s2.loli.net/2022/10/23/qvgBXAlaGi4rPw7.jpg)
+
 啊哈哈，在积攒了一段时间的想法后，我又来设计语言了
 
 意识到了过于动态的话我现在没办法驾驭，所以还是常规一点好了
