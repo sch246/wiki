@@ -91,6 +91,11 @@ const config = {
           label: "MC",
           position: "left",
         },
+        {
+          to: "IL/start",
+          label: "IL",
+          position: "left",
+        },
 
         {
           to: "blog",

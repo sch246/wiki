@@ -5,6 +5,10 @@ title: 开始
 
 import Cover from '@site/src/components/cover/main';
 
+:::caution 已废弃
+勉强留个案发现场？
+:::
+
 据《黑客与画家》所说，现在就可以设计百年后的编程语言了
 
 正好我一直有关于对世界的思考，加上最近对QQbot的搭建，让我有了更多的想法
