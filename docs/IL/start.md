@@ -11,7 +11,7 @@ import Cover from '@site/src/components/cover/main';
 
 意识到了过于动态的话我现在没办法驾驭，所以还是常规一点好了
 
-先命名为 IL 吧，indent lang 的缩写
+先命名为 IL 吧，indent lang 的缩写，当然理解成 indent list 也没问题
 
 顾名思义，它的写法和 python 类似，但是本质上是 lisp
 
