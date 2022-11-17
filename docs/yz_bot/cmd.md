@@ -3,6 +3,8 @@ sidebar_position: 2
 title: 添加命令的方法(可跳过)
 ---
 
+import Cover from '@site/src/components/cover/main';
+
 `_code/bot/cmds`下的非`_`开头的 .py 文件都会被识别成命令，可以使用`.`作为开头进行调用
 
 例如使用`.py`便可以调用`_code/bot/cmds/py.py`定义的命令

@@ -3,6 +3,8 @@ sidebar_position: 2
 title: MC服务器终端
 ---
 
+import Cover from '@site/src/components/cover/main';
+
 柚子bot 可以作为 Minecraft 服务器的终端使用
 
 ## 设置
