@@ -96,6 +96,11 @@ const config = {
           label: "IL",
           position: "left",
         },
+        {
+          to: "yz_bot/start",
+          label: "柚子bot",
+          position: "left",
+        },
 
         {
           to: "blog",

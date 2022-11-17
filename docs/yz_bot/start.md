@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
 title: 柚子bot0.4
 ---
 
@@ -9,36 +9,54 @@ import Cover from '@site/src/components/cover/main';
 
 关于安装过程就省略了，在 github 的 README 有写，这里谈怎么使用
 
+## 启动
+
+无论群聊或私聊，管理员对 bot 发送`.reboot`和`.shutdown`即可重启和关闭 bot
+
+> 重启可以快速应用新的源代码，对 bot 调试非常方便
+
+进入 bot 的目录并且使用 python3.10 以上运行 `run.py`可以启动 bot，可以加的参数有`debug`和`auto_reboot`
+
+> 也可以使用`_code/main.py`启动，不过那样将失去重启功能
+
+`debug`并没有什么用，早先可能会用但是现在没用了）之后可能还会用吧
+
+`auto_reboot`可以在 bot 出现异常时重新启动而不是关闭掉，不过如果启动阶段就出现异常的话会导致无限重启
+
+bot 使用 http 通信，连接 go-cqhttp 的地址需要在 `_code/bot/connect_with_http.py`设置
+<Cover>我从来没有想过 bot 需要开多个号的状况！也没有想过可能有多个bot在同个群的状况！(叉腰)</Cover>
+
 ## 文件结构
 
-使用这个 bot 会非常容易涉及到文件上的操作，毕竟可以通过 bot 远程影响它自身的运行方式
+使用 柚子bot 会非常容易涉及到文件上的操作
+
+不用源代码运行的 柚子bot 是没有灵魂的！
 
 文件目录大概是这个结构
 
 ```
 > _code         # bot自身的源代码，可编辑
-> chatlog       # bot保存的聊天记录
+> chatlog       # bot保存的聊天记录，可查看
 > data          # bot存储的自身和用户的数据，可编辑
-config.json     # bot的基础设定，不保存什么东西，与data的功能重合了，我考虑要不要删掉这个
+config.json     # bot的基础设定
 run.py          # 启动bot的py脚本
 ```
 
-`config.json`文件存储的是管理员(op)和 bot 自身的昵称(nickname)，都是列表
-
-以`run.py`启动 bot 可以让 bot 有重启功能(手动使用.reboot)，很显然也可以直接使用`_code/main.py`启动 bot ，但是这样的话 bot 就没有重启功能了
-
-> 重启功能是 bot 的重要功能，因为这样可以远程更改它的源代码并快速应用））
+`config.json`文件存储的是管理员(op, operator)和 bot 自身的昵称(nickname)，都是列表
 
 data下的文件结构如下，除了`pyload.py`之外，删掉不影响启动
+
 ```
 v data
+    > screens           # 打开的screen会保存log到这里
     v storage           # s3.storage 模块管理的区域
-        > users         # bot.user_storage 模块管理的区域，是玩家的个人存储
+        > groups        # 群的存储
+        > users         # 玩家的个人存储
+        cave.json       # 回声洞的数据保存到这里
         links.json      # .link 命令管理的links
 
     cache_msgs          # bot.cache 的消息存储，每个聊天范围只存储最近的256条
-    pyload.py           # .py 命令初始化时会运行的文件
-    tmp.txt             # 用!运行bash命令时的临时存储文件
+    pyload.py           # .py 命令初始化时会运行的文件，里面也有一部分设置
     (reboot_greet.py)   # .reboot 命令运行时的临时存储，可能不存在
     (shutdown_greet.py) # .shutdown命令运行时的临时存储，可能不存在
 ```
@@ -55,142 +73,7 @@ v _code
     > s3                # 独立于bot也能有用的模块
     main.py             # bot真正的运行脚本，控制bot核心运行
 ```
-
-### 添加命令的方法(可跳过)
-
-`_code/bot/cmds`下的非`_`开头的 .py 文件都会被识别成命令，可以使用`.`作为开头进行调用
-
-例如使用`.py`便可以调用`_code/bot/cmds/py.py`定义的命令
-
-以下展示`.echo`命令是如何创建的
-
----
-
-示例
-
-```
-user:
-    .echo awa
-bot:
-    awa
-```
-
-新建`echo.py`，注意名字不是`.echo.py`而是`echo.py`，在里面写下这些
-
-```python title="_code/bot/cmds/echo.py"
-def run(body:str):
-    return body.strip()
-```
-
----
-
-没了，就是这么简单
-
-`.`开头的命令毫无疑问是文本消息，run 函数接收一个字符串作为参数，如果返回字符串，那么 bot 就会将字符串也作为文本消息返回到这个聊天的区域
-
-这里的 body 是从命令名后面开始算起的字符串，例如直接使用
-
-```
-.echo a
-```
-
-那么 body 就是` a`，会包含中间的空格
-
-所以 run 的第一步就是使用`strip()`或者`lstrip()`
-
-...
-
-有时候只有本条消息的文本字符串是远远不够的
-
-不过没关系，你可以 import 啊
-
-```python
-from main import ...
-```
-
-> 外面的 run.py 并不是 bot 真正运行的地方，它只是为了支持`.reboot`命令，bot 直接运行的地方是`_code/main.py`，所以 import 是以它为基准的
-
-cmds 里的命令都是在 bot 马上要运行阶段才被加载的，所以可以毫无顾忌地 import `main`里面的东东
-
-而`main`把`bot`和`s3`模块里的东西几乎 import 了个遍，也不为啥，就为了方便引用
-
-所以四舍五入下就是你可以在任何位置 import 几乎任何东西
-
-<details>
-
-<summary>常用</summary>
-
-最常用的就是 `from main import cache` ，指`bot.cache`
-
-通过`cache.get_last()`，可以获得最后一条被记录的消息字典，而在无异步的 bot 这里，就等价于是触发命令的这条消息字典
-
-`cache.msgs`存储了bot存储的所有的消息字典，每个聊天区域的消息数不超过256条(默认)，这是它记录消息的核心
-
-通过`cache.getlog(msg)`可以通过一条 msg 获取这个聊天区域的最近消息列表
-
-:::tip
-
-注意，消息列表的存储是最近的放在前面，如果消息列表是lst，那么最近的消息要使用`lst[0]`来获取
-
-:::
-
-`cache.ops`存储了 op 列表，`cache.nicknames`存储了 bot 的昵称列表
-
-不过直接修改的话需要再使用`xx_save`函数来保存到`config.json`
-
-`cache.qq``cache.name`分别存储了 bot 的 qq 号和 QQ名称(不是昵称)
-
-`cache.names`存储的是 bot 的 QQ名称 加上昵称列表，所构成的名称列表
-
-`get_one(msg,f,i)`用于在当前聊天区域的最近列表内查找满足条件的最近一条消息，反正别想当历史消息查找用就行了，`f`是一个函数，接收消息字典返回布尔值
-
-其它的自己看源代码去
-
-</details>
-
-如果想要让 bot 能分条接收命令参数，使用`yield`
-
-其它的已经自动处理好了）只要`run`函数返回的是个生成器，那么就会被处理
-
-以下展示分条接收参数的命令如何创建
-
----
-
-示例
-
-```
-user:
-    .note
-bot:
-    输入note
-user:
-    哇
-bot:
-    记录成功
-```
-
-```python title="_code/bot/cmds/note.py"
-...
-def run(body:str):
-    reply = yield '输入note'
-    if not is_msg(reply):
-        return '不是文本消息，命令终止'
-    text = reply['message']
-    _save_note(text)
-    return '记录成功'
-```
-
----
-
-:::caution
-
-需要注意的是，yield 后，同一个人在同一个地方发送的任何消息，包括`.`开头的命令，都会被阻塞接收作为 reply
-
-同时`yield`也没办法接收另一个人，或者同一个人在另一个地方发送的消息
-
-除非发送`^C`，以`^`开头的消息是唯一比阻塞优先级更高的，这将终止在这个位置的全部阻塞，而命令也不会再继续执行下去
-
-:::
+### [添加命令](/yz_bot/cmd)
 
 ## 基本命令
 
@@ -201,6 +84,36 @@ def run(body:str):
 ### .echo
 
 基础命令，用于复读用户发送的消息
+
+### .cave
+
+回声洞，bot 的回声洞是全局的
+
+```
+.cave [<id:int>]  # 获取一条消息
+.cave add
+ : <msg>    # 放入一条消息
+ | || <msg> # 放入一条消息
+```
+
+### .answer
+
+答案之书，随机返回一条答案
+
+:::tip
+
+可以通过`.link`命令使得答案之书可以被便捷触发
+
+例如我设置的就是
+
+```
+.link re 答案之书
+(柚子(告诉我|我该)怎么办|无所不知伟大的柚子啊，请为我指引吧！|为什么不问问神奇柚子呢|柚子柚子告诉我)
+===
+cmds.modules['answer'].run('')
+```
+
+:::
 
 ### .reboot(需要权限)
 
@@ -276,6 +189,8 @@ get 和 send 和 to 用来发送和接收文件，不过似乎不怎么能用
 
 特别地，当最后一行以`###`开头时，本次运行的代码文本会被保存进`data/pyload.py`，在 bot 每次启动时加载
 
+在`.py`内使用`print`和`input`会输出和读取聊天区域的消息，但是这不意味着可以在`pyload.py`里这么做
+
 ### .link(需要权限)
 
 如若 bot 接收到的消息没有触发任何玩意(`^`，阻塞，命令，bash运行)，那么会通过 links 进行处理
@@ -300,14 +215,9 @@ user:
 bot:
     添加成功
 user:
-    .link set2 骰子
-bot:
-    输入cond
-user:
+    .link re 骰子
     \.r{r:Int}d{d:Int}$
-bot:
-    输入action
-user:
+    ===
     f'{getname()} 投了 {:r} 个 {:d} 面骰，总数为 {rd({:r}, {:d})}'
 bot:
     创建成功
@@ -321,19 +231,35 @@ bot:
 
 `.link`和`.py`的运行环境是一致的，这意味着`.link`同样能调用 bot 的几乎全部东西
 
-link 的`type`分为 2 种，分别是`py`和`re`，分别使用`.link set`和`.link set2`设置
+link 的`type`分为 2 种，分别是`py`和`re`，分别使用`.link py`和`.link re`设置
 
 完整的语法是
 
 ```
-.link (set|set2) <name>[ while( <other_name> (succ|fail))+]
- || <cond>
- || <action>
+.link
+    : (py|re) <name>[ while[ <other_name> (succ|fail)]+]
+        : \\n <cond> \\n===\\n <action>
+        | \\n <cond> || <action>
+        | || <cond> || <action>
+    | get <name>
+    | del <name>
+    | list
+    | catch
+        : <text>
+        | || <text>
 ```
 
-while 可以设置它在哪条 link 通过或未通过时执行
+设置同名 link 将会覆盖原有的 link
 
-当使用`set`时, `cond`和`action`作为 py 代码解析
+cond 和 action 可以和其它的在一条命令内同时完成设置，也可以分为多条依次输入
+
+while 可以设置它在哪条 link 通过或未通过时执行，当没有 while 参数时，将不会改变原有 link 的 while，否则会覆盖
+
+<details>
+
+<summary>当使用`py`时</summary>
+
+`cond`和`action`作为 py 代码解析
 
 cond 会以最后一行作为表达式求布尔值作为判断依据，action则是无脑exec
 
@@ -341,7 +267,13 @@ cond 会以最后一行作为表达式求布尔值作为判断依据，action则
 
 action 紧挨着 cond 成功时执行，原则上不允许 conds 使用 send,recv 和 do_action 等干涉自身的函数
 
-当使用`set2`时，`cond`和`action`分别作为特殊的正则表达式和特殊的 py 代码解析
+</details>
+
+<details>
+
+<summary>当使用`re`时</summary>
+
+`cond`和`action`分别作为特殊的正则表达式和特殊的 py 代码解析
 
 `action` 的最后一行会像`.py`一样返回，只是不会有`###`的记录
 
@@ -370,3 +302,16 @@ action 紧挨着 cond 成功时执行，原则上不允许 conds 使用 send,rec
 替换`action`里所有类似`{:name}`的东西，然后再将`action`作为 py 代码解析
 
 最后一行作为表达式返回
+
+</details>
+
+使用`get`可以得到一个 link 的信息，不包括它能触发哪些 links(这在`list`里有显示)，可以据此便捷重设这个 link
+
+使用 `del` 可以删除 link，连带这个 link 和其它 link 的关系一起
+
+(虽然就算不删应该，，也没啥问题，大概)
+
+使用 `list` 可以列出当前的全部 links 以及它们之间的触发关系
+
+使用 `catch` 可以根据对应的文本，找到这个文本能触发哪些 links，并且终结于哪些 links，debug用
+
