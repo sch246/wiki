@@ -26,7 +26,13 @@ mc_startbash = './run.sh'   # 相对于mc的路径，它的启动脚本在哪里
 
 为了能读取 screen 的输出，需要让 bot 启动对应的 screen 和 mc服务端
 
+<details>
+
+<summary>0.4.1</summary>
+
 screen 需要保证它的 log 输出是默认的，也就是`screenlog.0`
+
+</details>
 
 需要在服务器的配置中开启 rcon 才能使用完整的功能，虽然不开也不是不能用就是）
 
@@ -42,7 +48,7 @@ screen 需要保证它的 log 输出是默认的，也就是`screenlog.0`
 
 两者的区别在于一个是通过 rcon，一个是通过 screen
 
-rcon 的返回会更快，而 screen 的返回可能会延迟好几秒(难以忍受的慢)，且可能带有多余的输出
+rcon 的返回会更快，而 screen 的返回可能会延迟好几秒(在0.4.2解决该问题)，且可能带有多余的输出
 
 但好处是 screen 可以获取到`say`这种命令的输出
 
@@ -56,9 +62,16 @@ bot 重启会断开与 mc 的 rcon 的连接，再次使用`start_mc()`就行，
 
 ```
 .link re mc命令
-/{command:.*}
+\{command:.*}
 ===
 mc.send('{:command}')
 ```
 
-缺点是使用`/setblock`这种命令时电脑端会被替换成表情）
+```
+.link re mc命令2
+\\{command:.*}
+===
+screen.send('mc','{:command}')
+```
+
+务必注意先后顺序，后设置的命令默认来说优先级更高，请让`\\`被检测的优先级更高，否则`\\`将没有机会被触发

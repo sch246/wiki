@@ -5,6 +5,8 @@ title: 添加命令的方法(可跳过)
 
 import Cover from '@site/src/components/cover/main';
 
+## 开始
+
 `_code/bot/cmds`下的非`_`开头的 .py 文件都会被识别成命令，可以使用`.`作为开头进行调用
 
 例如使用`.py`便可以调用`_code/bot/cmds/py.py`定义的命令
@@ -43,11 +45,13 @@ def run(body:str):
 
 那么 body 就是` a`，会包含中间的空格
 
-所以 run 的第一步就是使用`strip()`或者`lstrip()`
+### 基本输入:str
 
-...
+### 基本输出:return
 
-有时候只有本条消息的文本字符串是远远不够的
+## import
+
+只有本条消息的文本字符串是远远不够的
 
 不过没关系，你可以 import 啊
 
@@ -63,7 +67,53 @@ cmds 里的命令都是在 bot 马上要运行阶段才被加载的，所以可�
 
 所以四舍五入下就是你可以在任何位置 import 几乎任何东西
 
-最常用的就是 `from main import cache` ，指`bot.cache`
+### 参数处理:read_params
+
+可以从`main`里 import `read_params`来进行参数处理，它的定义如下
+
+```python
+re_read = re.compile(r'\s+(\S+)([\S\s]*)')
+re_read_str = re.compile(r'\s+("[^"]*"|\S+)([\S\s]*)')
+
+def read_params(s:str, count=1, read_str=False):
+    '''从字符串中读取空白符后的下n段字符串
+    如果要读取引号，则可能抛出异常
+    读完后剩余的都是空字符串
+    若以非空白符开头，抛出SyntaxError
+    返回的字符串数量=count+1，最后一个为剩下的部分'''
+    if read_str:
+        r = re_read_str.match(s)
+    else:
+        r = re_read.match(s)
+    if not r:
+        if not s.strip():    # 全是空白符，或者就是一个空字符串
+            return ['']*(count+1)
+        raise SyntaxError('需要以空白符开头') # 剩下的唯一可能，引号后接非空白符也会触发
+    text, last = r.groups()
+    if read_str and len(text)>=2 and text[0] in ['"',"'"] and text[0]==text[1]:
+        text = text[1:-1]
+    if count==1:
+        return text, last
+    elif count>1:
+        return text, *read_params(last, count-1)
+    else:
+        raise ValueError('count必须大于0')
+```
+
+由于命令的触发规则，body要么是空字符串，要么以空白符开头
+
+```python
+# 永远可以在开头这么写来读取第一个参数
+s, last = read_params(body)
+# 读取后面的一个参数
+s2, last = read_params(last)
+# 读取再后面的3个参数
+a, b, c, last = read_params(last, 3)
+```
+
+### 关于当前状况的更多信息:cache
+
+`from main import cache` ，指`bot.cache`
 
 与`bot.storage`不同，`bot.cache`内的东西会随着bot关闭而丢失
 
@@ -85,7 +135,11 @@ cmds 里的命令都是在 bot 马上要运行阶段才被加载的，所以可�
 
 其它的自己看源代码去
 
-如果想要让 bot 能分条接收命令参数，使用`yield`
+## 等待消息
+
+### 等待消息/特殊输出:yield
+
+如果想要让命令能等待消息或文件啥的，实现类似`input`的功能，使用`yield`
 
 > 由于不想让每个函数加上async这种玩意，我采用手动yield来在单线程内实现异步
 
