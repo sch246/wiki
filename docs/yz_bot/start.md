@@ -5,6 +5,8 @@ title: 柚子bot0.4
 
 import Cover from '@site/src/components/cover/main';
 
+- [github项目地址](https://github.com/sch246/yz_bot)
+
 第三次重构，经历了从 ws 通信改成 http 通信又改成 ws 通信最后又改回 http 通信的过程
 
 关于安装过程就省略了，在 github 的 README 有写，这里谈怎么使用
